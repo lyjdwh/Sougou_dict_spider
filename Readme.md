@@ -71,9 +71,16 @@
 
 5. 当显示“任务结束...”表示下载和转化完毕，最后的词库文件路径为上面设置的 **txtSavePath**
 
+## 词库转换
+
+    # 合并词库
+    cat txt1/*/*/*.txt > sougou.txt
+
+    # 词库规范化
+    python convert.py
+
+    # 词库转换
+    libime_pinyindict sorted_sogou.txt sogou.dict
 
 ## 许可(License)
 [MIT license](https://github.com/StuPeter/Sougou_dict_spider/blob/master/LICENSE "MIT license")
-    
-
-
