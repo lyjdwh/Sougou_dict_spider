@@ -1,7 +1,7 @@
-#!/usr/bin/env python  
-# _*_ coding:utf-8 _*_  
-#  
-# @Version : 1.0  
+#!/usr/bin/env python
+# _*_ coding:utf-8 _*_
+#
+# @Version : 1.0
 # @Time    : 2019/11/1
 # @Author  : 圈圈烃
 # @File    : main
@@ -11,15 +11,16 @@
 import SougouSpider
 import Scel2Txt
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 # 下载类别
 Categories = ['城市信息:167', '自然科学:1', '社会科学:76', '工程应用:96', '农林渔畜:127', '医学医药:132',
               '电子游戏:436', '艺术设计:154', '生活百科:389', '运动休闲:367', '人文科学:31', '娱乐休闲:403']
 # Scel保存路径
-SavePath = r"f:\Users\QQT\Documents\Temp\scel1"
+SavePath = r"./scel1"
 
 # TXT保存路径
-txtSavePath = r"f:\Users\QQT\Documents\Temp\txt1"
+txtSavePath = r"./txt1"
 
 # 开始链接
 startUrl = "https://pinyin.sogou.com/dict/cate/index/436"
@@ -38,8 +39,10 @@ def main():
     for mc in Categories:
         myCategoryUrls.append("https://pinyin.sogou.com/dict/cate/index/" + mc.split(":")[-1])
     print(myCategoryUrls)
-    # 大类分类
-    for index, categoryOneUrl in enumerate(myCategoryUrls):
+
+    def down_one_category(index, categoryOneUrl):
+        # 大类分类
+
         # 创建保存路径
         categoryOnePath = SavePath + "/" + Categories[index].split(":")[-1]
         try:
@@ -53,8 +56,10 @@ def main():
             category2Type1Urls = SGSpider.GetCategory2Type1(resp)
         else:
             category2Type1Urls = SGSpider.GetCategory2Type2(resp)
-        # 小类分类
-        for key, url in category2Type1Urls.items():
+
+        def down_one_item(key, url):
+            # 小类分类
+
             # 创建保存路径
             categoryTwoPath = categoryOnePath + "/" + key
             try:
@@ -81,6 +86,15 @@ def main():
                     else:
                         SGSpider.Download(urlDownload, filePath)
                         print(keyDownload + " 保存成功......")
+
+        with ThreadPoolExecutor() as pool:
+            for key, url in category2Type1Urls.items():
+                pool.submit(down_one_item, key, url)
+
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        for index, categoryOneUrl in enumerate(myCategoryUrls):
+            pool.submit(down_one_category, index, categoryOneUrl)
+
     # 转scel为txt
     Scel2Txt.batch_file(SavePath, txtSavePath)
     print("任务结束...")

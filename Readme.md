@@ -43,11 +43,11 @@
         ├── Scel2Txt.py
         ├── requirements.txt
         └── Readme.md
-    
+
     + main.py为主程序，用于下载搜狗词库；
     + SougouSpider.py为解析和下载的类，供main.py调用；
     + Scel2Txt.py为.scel文件转.txt程序；
-    
+
 3. 要下载搜狗词库文件，需要先打开 main.py
 
         # 下载类别
@@ -55,10 +55,10 @@
               '电子游戏:436', '艺术设计:154', '生活百科:389', '运动休闲:367', '人文科学:31', '娱乐休闲:403']
         # Scel保存路径
         SavePath = r"f:\Users\Documents\zTemp Files\scel1"
-        
+
         # TXT保存路径
         txtSavePath = r"f:\Users\QQT\Documents\zTemp Files\txt"
-        
+
         # 开始链接
         startUrl = "https://pinyin.sogou.com/dict/cate/index/436"
 
@@ -67,7 +67,7 @@
     + TXT保存路径：这个自己指定；
     + 开始链接：这个建议默认；
 
-4. 如上设置设置完毕后，直接运行main.py即可。ps:由于是单线程下载，可能需要较长时间。
+4. 如上设置设置完毕后，直接运行main.py即可。
 
 5. 当显示“任务结束...”表示下载和转化完毕，最后的词库文件路径为上面设置的 **txtSavePath**
 
